@@ -330,22 +330,18 @@
 
 .rapel-altimetria-grafico {
   position: relative;
-  height: 170px;
+  height: 190px;
   overflow: hidden;
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
 
   background:
     linear-gradient(
       to right,
-      rgba(255, 255, 255, 0.05) 1px,
+      rgba(255, 255, 255, 0.04) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.05) 1px,
+      rgba(255, 255, 255, 0.04) 1px,
       transparent 1px
     );
 
@@ -353,30 +349,129 @@
 
   border-left: 1px solid rgba(255, 255, 255, 0.18);
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
-.rapel-altimetria-linha {
-  width: 74%;
-  height: 78%;
+/* PAREDÃO */
+
+.rapel-montanha {
+  position: absolute;
+  left: 9%;
+  bottom: 0;
+
+  width: 46%;
+  height: 88%;
 
   clip-path: polygon(
-    0 4%,
-    15% 12%,
-    28% 20%,
-    42% 36%,
-    58% 48%,
-    72% 67%,
-    86% 82%,
-    100% 100%,
-    0 100%
+    0 100%,
+    4% 78%,
+    8% 54%,
+    12% 30%,
+    20% 12%,
+    36% 5%,
+    56% 8%,
+    69% 18%,
+    76% 38%,
+    80% 60%,
+    88% 79%,
+    100% 100%
   );
 
-  background: linear-gradient(
-    180deg,
-    rgba(247, 148, 29, 0.78),
-    rgba(247, 148, 29, 0.12)
-  );
+  background:
+    linear-gradient(
+      110deg,
+      rgba(255, 255, 255, 0.08),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #6f5a40 0%,
+      #4d3d2d 42%,
+      #2b271f 100%
+    );
+
+  filter: drop-shadow(8px 4px 12px rgba(0, 0, 0, 0.4));
+}
+
+/* MARCAS DA PEDRA */
+
+.rapel-montanha::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      78deg,
+      transparent 24%,
+      rgba(255, 255, 255, 0.11) 25%,
+      transparent 27%
+    ),
+    linear-gradient(
+      102deg,
+      transparent 48%,
+      rgba(0, 0, 0, 0.2) 49%,
+      transparent 52%
+    ),
+    linear-gradient(
+      84deg,
+      transparent 69%,
+      rgba(255, 255, 255, 0.08) 70%,
+      transparent 72%
+    );
+}
+
+
+/* MEDIDA */
+
+
+
+.rapel-medida-chave{
+    position:relative;
+
+    width: 13px;
+    height:90%;
+
+    border-right:3px solid #ffffff;
+    border-radius:0 10px 10px 0;
+}
+
+.rapel-medida-chave::before,
+.rapel-medida-chave::after {
+  content: "";
+
+  position: absolute;
+  right: -3px;
+
+  width: 12px;
+  height: 3px;
+
+  background: #ffffff;
+  border-radius: 999px;
+}
+
+.rapel-medida-chave::before {
+  top: 0;
+}
+
+.rapel-medida-chave::after {
+  bottom: 0;
+}
+
+.rapel-medida{
+    position:absolute;
+
+    top:18px;
+
+    /* antes era right:8% */
+    left:25%;
+
+    height:180px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
 .rapel-altimetria-legenda {

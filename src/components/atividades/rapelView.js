@@ -121,9 +121,16 @@ function renderDetalhesRapel(rapel) {
     <span>${rapel.altura} m</span>
   </div>
 
-  <div class="rapel-altimetria-grafico">
-    <div class="rapel-altimetria-linha"></div>
+ <div class="rapel-altimetria-grafico">
+  <div class="rapel-montanha"></div>
+
+  <div class="rapel-corda"></div>
+
+  <div class="rapel-medida">
+    <span class="rapel-medida-chave"></span>
+    <strong>${rapel.altura} metros</strong>
   </div>
+</div>
 
   <div class="rapel-altimetria-legenda">
     <span>Início</span>
