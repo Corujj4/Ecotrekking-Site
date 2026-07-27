@@ -1,0 +1,359 @@
+.pagina-calendario-usuario {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+
+.cabecalho-calendario-usuario {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  gap: 8px;
+
+  padding: 22px 28px;
+
+  background: #232625;
+  border: 1px solid #383d39;
+  border-radius: 14px;
+
+  margin-bottom: 20px;
+}
+
+.titulo-cabecalho-calendario {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.titulo-cabecalho-calendario i {
+  color: #f36e01;
+  font-size: 32px;
+}
+
+.titulo-cabecalho-calendario h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #f36e01;
+  line-height: normal;
+}
+
+.cabecalho-calendario-usuario p {
+  margin: 0;
+  color: #b9b9b9;
+  font-size: 15px;
+}
+
+
+
+.lista-eventos-publicos {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.grupo-dia-eventos {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  overflow: hidden;
+  min-height: 180px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: #171a18;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.data-eventos-publicos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f1eee7;
+  color: #181b18;
+}
+
+.data-eventos-publicos strong {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.data-eventos-publicos span {
+  margin-top: 7px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.08rem;
+}
+
+.conteudo-grupo-dia {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.dia-semana-eventos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 34px;
+  padding: 7px 18px;
+
+  background: #315b3c;
+  color: #ffffff;
+
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.grade-eventos-publicos {
+  display: grid;
+  flex: 1;
+}
+
+.grade-eventos-publicos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex: 1;
+}
+
+.grade-eventos-publicos .evento-publico:only-child {
+  grid-column: 1 / -1;
+}
+
+
+.grade-eventos-publicos
+  .evento-publico:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.evento-publico {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px;
+
+    border-top: 4px solid transparent;
+
+    overflow: hidden;
+}
+.evento-publico::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background: #ff8a1f;
+}
+
+.evento-publico + .evento-publico {
+  border-left-width: 1px;
+  border-left-color: rgba(255, 255, 255, 0.08);
+}
+
+.evento-tipo-trilha {
+    border-top-color: #58b56b;
+}
+
+.evento-tipo-rapel {
+    border-top-color: #ff8a1f;
+}
+
+.evento-tipo-trip {
+    border-top-color: #5ab8df;
+}
+
+.cabecalho-evento-publico {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tipo-evento-publico {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #ff8a1f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+.evento-tipo-trilha .tipo-evento-publico {
+  color: #66c579;
+}
+
+.evento-tipo-rapel .tipo-evento-publico {
+  color: #ff8a1f;
+}
+
+.evento-tipo-trip .tipo-evento-publico {
+  color: #5db7dd;
+}
+
+.status-evento-publico {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.conteudo-evento-publico h2 {
+  margin: 14px 0 12px;
+  color: #ffffff;
+  font-size: 1.35rem;
+}
+
+.informacoes-evento-publico {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.88rem;
+}
+
+.descricao-evento-publico {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
+}
+
+.evento-status-cancelado {
+  opacity: 0.58;
+}
+
+.evento-status-cancelado h2 {
+  text-decoration: line-through;
+}
+
+.calendario-usuario-vazio {
+  padding: 65px 30px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.calendario-usuario-vazio span {
+  font-size: 3rem;
+}
+
+.calendario-usuario-vazio h2 {
+  margin: 18px 0 8px;
+}
+
+.calendario-usuario-vazio p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 760px) {
+  .grupo-dia-eventos {
+    grid-template-columns: 70px minmax(0, 1fr);
+  }
+
+  .data-eventos-publicos strong {
+    font-size: 1.9rem;
+  }
+
+  .grupo-dois-eventos,
+  .grupo-varios-eventos {
+    grid-template-columns: 1fr;
+  }
+
+  .evento-publico + .evento-publico {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 5px solid #f28c28;
+  }
+}
+
+@media (max-width: 520px) {
+  .layout-pagina.pagina-calendario-usuario {
+    width: calc(100% - 28px);
+  }
+
+  .cabecalho-calendario-usuario {
+    padding: 25px 22px;
+  }
+
+  .grupo-dia-eventos {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+
+  .data-eventos-publicos strong {
+    font-size: 1.55rem;
+  }
+
+  .data-eventos-publicos span {
+    font-size: 0.72rem;
+  }
+
+  .evento-publico {
+    padding: 17px;
+  }
+}
+.acoes-evento-publico {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.botao-detalhes-evento {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 122, 0, 0.55);
+  border-radius: 8px;
+
+  background: rgba(255, 122, 0, 0.08);
+  color: #ff8a1f;
+
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.botao-detalhes-evento:hover {
+  background: #ff7a00;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.botao-detalhes-evento i {
+  font-size: 0.75rem;
+}
+.conteudo-evento-publico {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}

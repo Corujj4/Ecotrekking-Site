@@ -77,7 +77,7 @@ export function renderCalendarioView() {
           ></section>
         </section>
 
-        <aside id="painel-evento" class="painel-evento painel-oculto">
+        <aside id="painel-evento" class="painel-evento">
           <div class="painel-vazio">
             <h2>Detalhes da trilha</h2>
 

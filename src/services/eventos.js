@@ -408,14 +408,7 @@ cardDia.classList.add("dia-selecionado");
   const data = cardDia.dataset.data;
   dataSelecionada = data;
   atualizarPainelPrevisao(data);
-  requestAnimationFrame(() => {
-  document
-    .querySelector("#painel-previsao-dia")
-    ?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-});
+  
 
   const eventosDoDia = eventos.filter((evento) => evento.data === data);
 

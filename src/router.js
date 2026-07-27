@@ -1,17 +1,19 @@
 import { renderHome } from "./pages/homePage.js";
-import { renderCalendario } from "./pages/calendarioPage.js";
+import {renderCalendario,iniciarPaginaCalendario,} from "./pages/calendarioPage.js";
 import { renderGaleria } from "./pages/galeriaPage.js";
+import {renderTrilhas,iniciarPaginaTrilhas} from "./pages/trilhasPage.js";
 import { criarCalendario } from "./components/calendario/calendario.js";
 import { configurarClima } from "./services/clima.js";
 import { configurarEventos } from "./services/eventos.js";
 import { renderNavbar } from "./components/navbar/navbar.js";
-import {renderTrilhas,iniciarPaginaTrilhas} from "./pages/trilhasPage.js";
 import {renderRapel,iniciarPaginaRapel} from "./pages/rapelPage.js";
 import {renderExpedicoes,iniciarPaginaExpedicoes} from "./pages/expedicoesPage.js";
+import {renderCalendarioADMIN} from "./pages/calendarioPageADMIN.js";
 
 const rotas = {
   "/": renderHome,
   "/calendario": renderCalendario,
+  "/calendario-admin": renderCalendarioADMIN,
   "/trilhas": renderTrilhas,
   "/galeria": renderGaleria,
   "/rapel": renderRapel,
@@ -31,11 +33,14 @@ function renderizarPagina() {
 
   app.innerHTML = renderizar();
 
-  if (rotaAtual === "/calendario") {
-    configurarClima();
-    configurarEventos();
-    criarCalendario();
-  }
+  if (rotaAtual === "/calendario-admin") {
+  configurarClima();
+  configurarEventos();
+  criarCalendario();
+}
+if (rotaAtual === "/calendario") {
+  iniciarPaginaCalendario();
+}
 
    if (rotaAtual === "/trilhas") {
     iniciarPaginaTrilhas();
