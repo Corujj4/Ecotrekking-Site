@@ -1,6 +1,6 @@
 import { renderHome } from "./pages/homePage.js";
 import {renderCalendario,iniciarPaginaCalendario,} from "./pages/calendarioPage.js";
-import { renderGaleria } from "./pages/galeriaPage.js";
+import { renderGaleriaPage } from "./pages/galeriaPage.js";
 import {renderTrilhas,iniciarPaginaTrilhas} from "./pages/trilhasPage.js";
 import { criarCalendario } from "./components/calendario/calendario.js";
 import { configurarClima } from "./services/clima.js";
@@ -15,7 +15,7 @@ const rotas = {
   "/calendario": renderCalendario,
   "/calendario-admin": renderCalendarioADMIN,
   "/trilhas": renderTrilhas,
-  "/galeria": renderGaleria,
+  "/galeria": renderGaleriaPage,
   "/rapel": renderRapel,
   "/expedicoes": renderExpedicoes
 };
