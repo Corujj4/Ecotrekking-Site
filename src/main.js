@@ -15,4 +15,5 @@ import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import { iniciarRouter } from "./router.js";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
+
 iniciarRouter();

@@ -1,5 +1,12 @@
 import { obterPrevisaoPorData } from "../services/clima.js";
-import { carregarEventos, salvarEventos } from "../services/storageService.js";
+
+import {
+  listarEventos,
+  criarEvento,
+  atualizarEvento,
+  excluirEventoBanco,
+} from "../services/eventosService.js";
+
 import { atualizarPainelPrevisao }
 from "../components/calendario/painelPrevisao.js";
 
@@ -9,18 +16,25 @@ let painelConfigurado = null;
 let calendarioConfigurado = null;
 let eventoCalendarioConfigurado = false;
 
-const eventos = carregarEventos();
+let eventos = [];
 
 let dataSelecionada = null;
 let eventoEditando = null;
 
-export function configurarEventos() {
+export async function configurarEventos() {
   painelEvento = document.querySelector("#painel-evento");
   calendario = document.querySelector("#calendario");
 
   if (!painelEvento || !calendario) {
     console.error("Elementos dos eventos não encontrados.");
     return;
+  }
+
+  try {
+    eventos = await listarEventos();
+  } catch (erro) {
+    console.error("Erro ao carregar eventos:", erro);
+    eventos = [];
   }
 
   if (painelConfigurado !== painelEvento) {
@@ -36,10 +50,17 @@ export function configurarEventos() {
   }
 
   if (!eventoCalendarioConfigurado) {
-    document.addEventListener("calendarioRenderizado", mostrarTodosEventos);
+    document.addEventListener(
+      "calendarioRenderizado",
+      mostrarTodosEventos,
+    );
+
     eventoCalendarioConfigurado = true;
   }
+
+  mostrarTodosEventos();
 }
+
 function formatarCampoHorario(eventoInput) {
   const campo = eventoInput.target;
 
@@ -62,10 +83,6 @@ function formatarCampoHorario(eventoInput) {
 
   campo.value =
     `${numeros.slice(0, 2)}:${numeros.slice(2)}`;
-}
-
-function salvarEventosNoNavegador() {
-  salvarEventos(eventos);
 }
 
 function tratarCliquePainel(eventoClique) {
@@ -138,6 +155,14 @@ function tratarCliquePainel(eventoClique) {
 }
 
 function mostrarTodosEventos() {
+  if (!calendario) {
+    return;
+  }
+
+  calendario
+    .querySelectorAll(".resumo-evento")
+    .forEach((elemento) => elemento.remove());
+
   eventos.forEach((evento) => {
     mostrarEventoNoCalendario(evento);
   });
@@ -178,12 +203,23 @@ function abrirFormularioNovoEvento(dia) {
       </div>
 
       <label for="titulo-evento">Título</label>
-      <input
-        id="titulo-evento"
-        name="titulo"
-        type="text"
-        required
-      />
+
+<input
+  id="titulo-evento"
+  name="titulo"
+  type="text"
+  required
+/>
+
+<label for="tipo-evento">Tipo</label>
+
+<select id="tipo-evento" name="tipo" required>
+  <option value="trilha">Trilha</option>
+  <option value="rapel">Rapel</option>
+  <option value="trip">Trip</option>
+</select>
+
+<label for="local-evento">Local</label>
       <label for="local-evento">Local</label>
       <input
         id="local-evento"
@@ -278,6 +314,7 @@ function abrirFormularioNovoEvento(dia) {
     </form>
   `;
 }
+
 function abrirDetalhesEvento(eventoId) {
   const eventoEncontrado = eventos.find((evento) => evento.id === eventoId);
 
@@ -305,10 +342,12 @@ function abrirDetalhesEvento(eventoId) {
 
         <div class="grade-detalhes-evento">
   <div class="detalhe-evento destaque-trilha">
-    <span class="detalhe-icone">🥾</span>
+   <span class="detalhe-icone">
+  ${obterIconeTipo(eventoEncontrado.tipo)}
+</span>
 
-    <div>
-      <small>Trilha</small>
+<div>
+  <small>${formatarTipo(eventoEncontrado.tipo)}</small>
       <strong>
         ${eventoEncontrado.numeroTrilha
           ? `${eventoEncontrado.numeroTrilha}º`
@@ -452,8 +491,15 @@ const resumoClima = previsao
                 type="button"
                 data-evento-id="${evento.id}"
               >
-                <strong>${evento.titulo}</strong>
-                <span>${formatarStatus(evento.status)}</span>
+               <strong>
+  ${obterIconeTipo(evento.tipo)}
+  ${evento.titulo}
+</strong>
+
+<span>
+  ${formatarTipo(evento.tipo)} ·
+  ${formatarStatus(evento.status)}
+</span>
               </button>
             `,
           )
@@ -498,6 +544,7 @@ const resumoClima = previsao
     </div>
   `;
 }
+
 function criarTimelineClima(data) {
   const previsao = obterPrevisaoPorData(data);
   console.log(previsao);
@@ -611,26 +658,10 @@ function abrirConfirmacaoExclusao(eventoId) {
   `;
 }
 
-function excluirEvento(eventoId) {
-  const indiceEvento = eventos.findIndex((evento) => evento.id === eventoId);
-
-  if (indiceEvento === -1) {
-    return;
-  }
-
-  eventos.splice(indiceEvento, 1);
-  salvarEventosNoNavegador();
-
-  const botaoEvento = calendario.querySelector(
-    `[data-evento-id="${eventoId}"]`,
-  );
-
-  botaoEvento?.remove();
-
-  fecharPainel();
-}
 function abrirFormularioEdicao(eventoId) {
-  const evento = eventos.find((item) => item.id === eventoId);
+  const evento = eventos.find(
+    (item) => item.id === eventoId,
+  );
 
   if (!evento) {
     return;
@@ -639,88 +670,46 @@ function abrirFormularioEdicao(eventoId) {
   eventoEditando = evento.id;
   dataSelecionada = evento.data;
 
-  abrirFormularioNovoEvento(Number(evento.data.slice(-2)));
+  abrirFormularioNovoEvento(
+    Number(evento.data.slice(-2)),
+  );
 
-  document.querySelector("#titulo-evento").value = evento.titulo;
+  document.querySelector("#titulo-evento").value =
+    evento.titulo ?? "";
+    
+  document.querySelector("#tipo-evento").value =
+  evento.tipo ?? "trilha";
 
-  document.querySelector("#local-evento").value = evento.local ?? "";
+  document.querySelector("#local-evento").value =
+    evento.local ?? "";
 
   document.querySelector("#numero-trilha").value =
-  evento.numeroTrilha ?? "";
+    evento.numeroTrilha ?? "";
 
   document.querySelector("#quilometragem-evento").value =
-  evento.quilometragem ?? "";
+    evento.quilometragem ?? "";
 
   document.querySelector("#horario-inicio").value =
-  evento.horarioInicio ?? "";
+    evento.horarioInicio ?? "";
 
   document.querySelector("#horario-fim").value =
-  evento.horarioFim ?? "";    
-  document.querySelector("#descricao-evento").value = evento.descricao;
+    evento.horarioFim ?? "";
 
-  document.querySelector("#status-evento").value = evento.status;
-}
+  document.querySelector("#descricao-evento").value =
+    evento.descricao ?? "";
 
-function salvarEvento(eventoSubmit) {
-  eventoSubmit.preventDefault();
-
-  const formulario = eventoSubmit.target;
-
-  if (eventoEditando) {
-    const eventoExistente = eventos.find(
-      (evento) => evento.id === eventoEditando,
-    );
-
-    if (!eventoExistente) {
-      return;
-    }
-
-    eventoExistente.titulo = formulario.titulo.value.trim();
-    eventoExistente.local = formulario.local.value.trim();
-    eventoExistente.numeroTrilha =
-    formulario.numeroTrilha.value.trim();
-
-    eventoExistente.quilometragem =
-    formulario.quilometragem.value.trim();
-
-    eventoExistente.horarioInicio =
-    formulario.horarioInicio.value;
-
-    eventoExistente.horarioFim =
-    formulario.horarioFim.value;
-    eventoExistente.descricao = formulario.descricao.value.trim();
-    eventoExistente.status = formulario.status.value;
-    salvarEventosNoNavegador();
-
-    atualizarEventoNoCalendario(eventoExistente);
-
-    eventoEditando = null;
-    fecharPainel();
-    return;
-  }
-
-  const novoEvento = {
-    id: crypto.randomUUID(),
-    data: dataSelecionada,
-    titulo: formulario.titulo.value.trim(),
-    descricao: formulario.descricao.value.trim(),
-    status: formulario.status.value,
-    local: formulario.local.value.trim(),
-    numeroTrilha: formulario.numeroTrilha.value.trim(),
-    quilometragem: formulario.quilometragem.value.trim(),
-    horarioInicio: formulario.horarioInicio.value,
-    horarioFim: formulario.horarioFim.value,
-  };
-
-  eventos.push(novoEvento);
-  salvarEventosNoNavegador();
-
-  mostrarEventoNoCalendario(novoEvento);
-  fecharPainel();
+  document.querySelector("#status-evento").value =
+    evento.status ?? "lancado";
 }
 
 function mostrarEventoNoCalendario(evento) {
-  const cardDia = calendario.querySelector(`[data-data="${evento.data}"]`);
+  if (!calendario || !evento?.data) {
+    return;
+  }
+
+  const cardDia = calendario.querySelector(
+    `[data-data="${evento.data}"]`,
+  );
 
   if (!cardDia) {
     return;
@@ -728,35 +717,59 @@ function mostrarEventoNoCalendario(evento) {
 
   const areaEventos = cardDia.querySelector(".eventos-dia");
 
+  if (!areaEventos) {
+    return;
+  }
+
+  const eventoJaExiste = areaEventos.querySelector(
+    `[data-evento-id="${evento.id}"]`,
+  );
+
+  if (eventoJaExiste) {
+    return;
+  }
+
   const botaoEvento = document.createElement("button");
 
-  botaoEvento.classList.add("resumo-evento", `evento-${evento.status}`);
+  botaoEvento.classList.add(
+    "resumo-evento",
+    `evento-${evento.status}`,
+  );
 
   botaoEvento.type = "button";
   botaoEvento.dataset.eventoId = evento.id;
 
   botaoEvento.innerHTML = `
-  <strong>${evento.titulo}</strong>
-  <span>${formatarStatus(evento.status)}</span>
+  <strong>
+    ${obterIconeTipo(evento.tipo)}
+    ${evento.titulo}
+  </strong>
+
+  <span>
+    ${formatarTipo(evento.tipo)} ·
+    ${formatarStatus(evento.status)}
+  </span>
 `;
 
   areaEventos.appendChild(botaoEvento);
 }
-function atualizarEventoNoCalendario(evento) {
-  const botaoEvento = calendario.querySelector(
-    `[data-evento-id="${evento.id}"]`,
-  );
+function formatarTipo(tipo) {
+  const nomesTipos = {
+    trilha: "Trilha",
+    rapel: "Rapel",
+    trip: "Trip",
+  };
 
-  if (!botaoEvento) {
-    return;
-  }
+  return nomesTipos[tipo] ?? "Evento";
+}
+function obterIconeTipo(tipo) {
+  const iconesTipos = {
+    trilha: "🥾",
+    rapel: "🧗",
+    trip: "🚌",
+  };
 
-  botaoEvento.className = `resumo-evento evento-${evento.status}`;
-
-  botaoEvento.innerHTML = `
-  <strong>${evento.titulo}</strong>
-  <span>${formatarStatus(evento.status)}</span>
-`;
+  return iconesTipos[tipo] ?? "📅";
 }
 
 function formatarStatus(status) {
@@ -783,4 +796,129 @@ function fecharPainel() {
       </p>
     </div>
   `;
+}
+
+function atualizarEventoNoCalendario(evento) {
+  const botaoEvento = calendario.querySelector(
+    `[data-evento-id="${evento.id}"]`,
+  );
+
+  if (!botaoEvento) {
+    mostrarEventoNoCalendario(evento);
+    return;
+  }
+
+  botaoEvento.className =
+    `resumo-evento evento-${evento.status}`;
+
+  botaoEvento.innerHTML = `
+  <strong>
+    ${obterIconeTipo(evento.tipo)}
+    ${evento.titulo}
+  </strong>
+
+  <span>
+    ${formatarTipo(evento.tipo)} ·
+    ${formatarStatus(evento.status)}
+  </span>
+`;
+}
+
+async function salvarEvento(eventoSubmit) {
+  eventoSubmit.preventDefault();
+
+  const formulario = eventoSubmit.target;
+
+  const botaoSalvar = formulario.querySelector(
+    'button[type="submit"]',
+  );
+
+  const dadosEvento = {
+    data: dataSelecionada,
+    titulo: formulario.titulo.value.trim(),
+    descricao: formulario.descricao.value.trim(),
+    status: formulario.status.value,
+    local: formulario.local.value.trim(),
+    numeroTrilha: formulario.numeroTrilha.value.trim(),
+    quilometragem: formulario.quilometragem.value.trim(),
+    horarioInicio: formulario.horarioInicio.value,
+    horarioFim: formulario.horarioFim.value,
+    tipo: formulario.tipo.value,
+  };
+
+  botaoSalvar.disabled = true;
+  botaoSalvar.textContent = "Salvando...";
+
+  try {
+    if (eventoEditando) {
+      const indiceEvento = eventos.findIndex(
+        (evento) => evento.id === eventoEditando,
+      );
+
+      if (indiceEvento === -1) {
+        return;
+      }
+
+      const eventoAtualizado = await atualizarEvento(
+        eventoEditando,
+        {
+          ...eventos[indiceEvento],
+          ...dadosEvento,
+        },
+      );
+
+      eventos[indiceEvento] = eventoAtualizado;
+
+      atualizarEventoNoCalendario(eventoAtualizado);
+
+      eventoEditando = null;
+
+      fecharPainel();
+
+      return;
+    }
+
+    const novoEvento = await criarEvento(dadosEvento);
+
+    eventos.push(novoEvento);
+
+    mostrarEventoNoCalendario(novoEvento);
+
+    fecharPainel();
+  } catch (erro) {
+    console.error("Erro ao salvar evento:", erro);
+
+    alert("Não foi possível salvar o evento.");
+
+    botaoSalvar.disabled = false;
+    botaoSalvar.textContent = "Salvar evento";
+  }
+}
+
+async function excluirEvento(eventoId) {
+  const indiceEvento = eventos.findIndex(
+    (evento) => evento.id === eventoId,
+  );
+
+  if (indiceEvento === -1) {
+    return;
+  }
+
+  try {
+    await excluirEventoBanco(eventoId);
+
+    eventos.splice(indiceEvento, 1);
+
+    const botaoEvento = calendario.querySelector(
+      `[data-evento-id="${eventoId}"]`,
+    );
+
+    botaoEvento?.remove();
+
+    fecharPainel();
+  } catch (erro) {
+    console.error("Erro ao excluir evento:", erro);
+
+    alert("Não foi possível excluir o evento.");
+  }
 }

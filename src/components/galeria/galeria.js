@@ -8,7 +8,7 @@ const albuns = [
         titulo:"Trilha da Cascata",
         data:"20/07/2026",
         imagem:trilha1,
-        link:"https://drive.google.com/..."
+        link:"https://drive.google.com/drive/folders/1DOE2Phdf0NEJXhezIU5ClH0PznCyT_hf?usp=drive_link"
     },
     {
         id:2,

@@ -1,5 +1,4 @@
-import { carregarEventos } from "../../services/storageService.js";
-
+import { listarEventos } from "../../services/eventosService.js";
 const configuracaoTipos = {
   trilha: {
     nome: "Trilha",
@@ -186,8 +185,8 @@ function agruparEventosPorData(eventos) {
   }, {});
 }
 
-function obterEventosFuturos() {
-  const eventos = carregarEventos();
+async function obterEventosFuturos() {
+  const eventos = await listarEventos();
 
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
@@ -239,7 +238,7 @@ export function renderCalendarioUsu() {
   `;
 }
 
-export function iniciarCalendarioUsu() {
+export async function iniciarCalendarioUsu() {
   const listaEventos = document.querySelector(
     "#lista-eventos-publicos",
   );
@@ -248,30 +247,54 @@ export function iniciarCalendarioUsu() {
     return;
   }
 
-  const eventos = obterEventosFuturos();
+  listaEventos.innerHTML = `
+    <div class="calendario-usuario-vazio">
+      <span>⏳</span>
 
-  if (eventos.length === 0) {
+      <h2>Carregando eventos...</h2>
+    </div>
+  `;
+
+  try {
+    const eventos = await obterEventosFuturos();
+
+    if (eventos.length === 0) {
+      listaEventos.innerHTML = `
+        <div class="calendario-usuario-vazio">
+          <span>🥾</span>
+
+          <h2>Nenhum evento programado</h2>
+
+          <p>
+            Assim que novas atividades forem confirmadas,
+            elas aparecerão aqui.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+    const eventosAgrupados = agruparEventosPorData(eventos);
+
+    listaEventos.innerHTML = Object.entries(eventosAgrupados)
+      .map(([data, eventosDoDia]) =>
+        renderGrupoDia(data, eventosDoDia),
+      )
+      .join("");
+  } catch (erro) {
+    console.error(erro);
+
     listaEventos.innerHTML = `
       <div class="calendario-usuario-vazio">
-        <span>🥾</span>
+        <span>⚠️</span>
 
-        <h2>Nenhum evento programado</h2>
+        <h2>Não foi possível carregar os eventos</h2>
 
         <p>
-          Assim que novas atividades forem confirmadas,
-          elas aparecerão aqui.
+          Tente novamente dentro de alguns instantes.
         </p>
       </div>
     `;
-
-    return;
   }
-
-  const eventosAgrupados = agruparEventosPorData(eventos);
-
-  listaEventos.innerHTML = Object.entries(eventosAgrupados)
-    .map(([data, eventosDoDia]) =>
-      renderGrupoDia(data, eventosDoDia),
-    )
-    .join("");
 }
