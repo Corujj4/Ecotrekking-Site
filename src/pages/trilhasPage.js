@@ -1,18 +1,18 @@
 import {
-  renderTrilhasView,
-  iniciarTrilhas
-} from "../components/atividades/trilhasView.js";
+  renderCatalogo,
+  iniciarCatalogo
+} from "../components/catalogo/catalogoView.js";
 import { renderFooter } from "../components/home/footer.js";
 import { renderNavbar } from "../components/navbar/navbar.js";
 
 export function renderTrilhas() {
   return `
     ${renderNavbar()}
-    ${renderTrilhasView()}
+    ${renderCatalogo("trilha")}
     ${renderFooter()}
   `;
 }
 
 export function iniciarPaginaTrilhas() {
-  iniciarTrilhas();
+  iniciarCatalogo("trilha");
 }

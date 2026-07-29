@@ -1,5 +1,5 @@
 import { renderNavbar } from "../components/navbar/navbar.js";
-import { renderCalendarioView } from "../components/calendario/calendarioView.js";
+import { renderCalendarioView } from "../components/calendario/calendarioUsu.js";
 import {criarCalendario} from "../components/calendario/calendario.js";
 import {configurarEventos} from "../services/eventos.js";
 
