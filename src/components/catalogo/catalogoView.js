@@ -1771,4 +1771,3 @@ export function iniciarCatalogo(tipo) {
 export function finalizarCatalogo() {
   destruirMapaExpedicao();
 }
-

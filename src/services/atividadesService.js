@@ -1,5 +1,9 @@
 import { supabase } from "./supabaseClient.js";
 
+/* =========================================================
+   FUNÇÕES AUXILIARES
+========================================================= */
+
 function converterNumero(valor) {
   if (
     valor === null ||
@@ -11,151 +15,150 @@ function converterNumero(valor) {
   }
 
   const numero = Number(
-    String(valor).replace(",", "."),
+    String(valor).replace(",", ".")
   );
 
   return Number.isNaN(numero) ? null : numero;
 }
 
+function converterTexto(valor) {
+  if (
+    valor === null ||
+    valor === undefined ||
+    valor === "" ||
+    valor === "#"
+  ) {
+    return null;
+  }
+
+  return String(valor).trim();
+}
+
 function converterAtividadeBanco(atividade) {
   return {
     id: atividade.id,
-    tipo: atividade.tipo,
-    nome: atividade.nome,
 
-    cidade:
-      atividade.cidade === "#"
-        ? null
-        : atividade.cidade,
+    tipo: converterTexto(atividade.tipo),
+    nome: converterTexto(atividade.nome),
 
-    estado:
-      atividade.estado === "#"
-        ? null
-        : atividade.estado,
+    cidade: converterTexto(atividade.cidade),
+    estado: converterTexto(atividade.estado),
 
-    local:
-      atividade.local === "#"
-        ? null
-        : atividade.local,
+    origem: converterCoordenada(atividade.origem),
+destino: converterCoordenada(atividade.destino),
 
-    descricao:
-      atividade.descricao === "#"
-        ? null
-        : atividade.descricao,
-
-    dificuldade:
-      atividade.dificuldade === "#"
-        ? null
-        : atividade.dificuldade,
+    descricao: converterTexto(atividade.descricao),
+    dificuldade: converterTexto(atividade.dificuldade),
 
     quilometragem: converterNumero(
-      atividade.quilometragem,
+      atividade.quilometragem
     ),
 
-    nivel: converterNumero(atividade.nivel),
+    nivel: converterNumero(
+      atividade.nivel
+    ),
 
-    altura: converterNumero(atividade.altura),
+    altura: converterNumero(
+      atividade.altura
+    ),
 
     capacidade: converterNumero(
-      atividade.capacidade,
+      atividade.capacidade
     ),
 
-    temperatura:
-      atividade.temperatura === "#"
-        ? null
-        : atividade.temperatura,
+    temperatura: converterTexto(
+      atividade.temperatura
+    ),
 
-    imagem:
-      atividade.imagem === "#"
-        ? null
-        : atividade.imagem,
-
-    mapa:
-      atividade.mapa === "#"
-        ? null
-        : atividade.mapa,
+    imagem: converterTexto(
+      atividade.imagem
+    ),
   };
 }
 
 function converterAtividadeParaBanco(atividade) {
   return {
-    tipo: atividade.tipo,
-    nome: atividade.nome?.trim(),
+    tipo: converterTexto(atividade.tipo),
 
-    cidade: atividade.cidade?.trim() || null,
-    estado: atividade.estado?.trim() || null,
-    local: atividade.local?.trim() || null,
+    nome: converterTexto(atividade.nome),
 
-    descricao:
-      atividade.descricao?.trim() || null,
+    cidade: converterTexto(atividade.cidade),
+    estado: converterTexto(atividade.estado),
 
-    dificuldade:
-      atividade.dificuldade?.trim() || null,
+    origem: converterCoordenada(atividade.origem),
+    destino: converterCoordenada(atividade.destino),
 
-    distancia: converterNumero(atividade.quilometragem),
-    
-    quilometragem:
-      converterNumero(atividade.quilometragem),
+    descricao: converterTexto(atividade.descricao),
+    dificuldade: converterTexto(atividade.dificuldade),
 
-    nivel: converterNumero(atividade.nivel),
+    quilometragem: converterNumero(
+      atividade.quilometragem
+    ),
 
-    altura: converterNumero(atividade.altura),
+    nivel: converterNumero(
+      atividade.nivel
+    ),
 
-    capacidade:
-      converterNumero(atividade.capacidade),
+    altura: converterNumero(
+      atividade.altura
+    ),
 
-    temperatura:
-      atividade.temperatura?.trim() || null,
+    capacidade: converterNumero(
+      atividade.capacidade
+    ),
 
-    imagem: atividade.imagem?.trim() || null,
-    mapa: atividade.mapa?.trim() || null,
+    temperatura: converterTexto(
+      atividade.temperatura
+    ),
+
+    imagem: converterTexto(
+      atividade.imagem
+    ),
   };
 }
 
-export async function listarAtividades(tipo = null) {
-  let consulta = supabase
-    .from("atividades")
-    .select("*")
-    .order("nome", { ascending: true });
-
-  if (tipo) {
-    consulta = consulta.eq("tipo", tipo);
+function converterCoordenada(valor) {
+  if (
+    valor === null ||
+    valor === undefined ||
+    valor === ""
+  ) {
+    return null;
   }
 
-  const { data, error } = await consulta;
+  if (Array.isArray(valor) && valor.length >= 2) {
+    const latitude = Number(valor[0]);
+    const longitude = Number(valor[1]);
 
-  if (error) {
-    console.error(
-      "Erro ao listar atividades:",
-      error,
-    );
-
-    throw error;
+    if (
+      Number.isFinite(latitude) &&
+      Number.isFinite(longitude)
+    ) {
+      return [latitude, longitude];
+    }
   }
 
-  return (data ?? []).map(
-    converterAtividadeBanco,
-  );
+  if (typeof valor === "string") {
+    const partes = valor
+      .split(",")
+      .map((parte) => Number(parte.trim()));
+
+    if (
+      partes.length >= 2 &&
+      Number.isFinite(partes[0]) &&
+      Number.isFinite(partes[1])
+    ) {
+      return [partes[0], partes[1]];
+    }
+  }
+
+  return null;
 }
 
-export async function buscarAtividade(id) {
-  const { data, error } = await supabase
-    .from("atividades")
-    .select("*")
-    .eq("id", id)
-    .single();
 
-  if (error) {
-    console.error(
-      "Erro ao buscar atividade:",
-      error,
-    );
-
-    throw error;
-  }
-
-  return converterAtividadeBanco(data);
-}
+/* =========================================================
+   CRIAR
+========================================================= */
 
 export async function criarAtividade(atividade) {
   const dadosBanco =
@@ -170,7 +173,7 @@ export async function criarAtividade(atividade) {
   if (error) {
     console.error(
       "Erro ao criar atividade:",
-      error,
+      error
     );
 
     throw error;
@@ -179,9 +182,66 @@ export async function criarAtividade(atividade) {
   return converterAtividadeBanco(data);
 }
 
+
+/* =========================================================
+   MOSTRAR / BUSCAR
+========================================================= */
+
+export async function listarAtividades(tipo = null) {
+  let consulta = supabase
+    .from("atividades")
+    .select("*")
+    .order("nome", {
+      ascending: true
+    });
+
+  if (tipo) {
+    consulta = consulta.eq("tipo", tipo);
+  }
+
+  const { data, error } = await consulta;
+
+  if (error) {
+    console.error(
+      "Erro ao listar atividades:",
+      error
+    );
+
+    throw error;
+  }
+
+  return (data ?? []).map(
+    converterAtividadeBanco
+  );
+}
+
+export async function buscarAtividade(id) {
+  const { data, error } = await supabase
+    .from("atividades")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(
+      "Erro ao buscar atividade:",
+      error
+    );
+
+    throw error;
+  }
+
+  return converterAtividadeBanco(data);
+}
+
+
+/* =========================================================
+   EDITAR
+========================================================= */
+
 export async function atualizarAtividade(
   id,
-  atividade,
+  atividade
 ) {
   const dadosBanco =
     converterAtividadeParaBanco(atividade);
@@ -196,7 +256,7 @@ export async function atualizarAtividade(
   if (error) {
     console.error(
       "Erro ao atualizar atividade:",
-      error,
+      error
     );
 
     throw error;
@@ -204,6 +264,11 @@ export async function atualizarAtividade(
 
   return converterAtividadeBanco(data);
 }
+
+
+/* =========================================================
+   EXCLUIR
+========================================================= */
 
 export async function excluirAtividade(id) {
   const { error } = await supabase
@@ -214,7 +279,7 @@ export async function excluirAtividade(id) {
   if (error) {
     console.error(
       "Erro ao excluir atividade:",
-      error,
+      error
     );
 
     throw error;
