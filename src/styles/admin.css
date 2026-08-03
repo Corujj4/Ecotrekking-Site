@@ -1,0 +1,136 @@
+.pagina-login-admin {
+  min-height: calc(100vh - 160px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+
+  color: var(--cor-texto-claro, #ffffff);
+}
+
+.login-admin-container {
+  width: min(100%, 440px);
+
+  padding: 30px;
+
+  background: rgba(25, 29, 28, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+.login-admin-cabecalho {
+  margin-bottom: 26px;
+
+  text-align: center;
+}
+
+.login-admin-cabecalho > i {
+  margin-bottom: 14px;
+
+  color: #f7941d;
+  font-size: 2.5rem;
+}
+
+.login-admin-cabecalho h1 {
+  margin: 0 0 8px;
+
+  font-size: 1.7rem;
+}
+
+.login-admin-cabecalho p {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+}
+
+.login-admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-admin-form label > span {
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.login-admin-form input {
+  width: 100%;
+  min-height: 46px;
+
+  padding: 0 13px;
+
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+
+  outline: none;
+  box-sizing: border-box;
+}
+
+.login-admin-form input:focus {
+  border-color: #f7941d;
+
+  box-shadow:
+    0 0 0 3px rgba(247, 148, 29, 0.15);
+}
+
+.login-admin-erro {
+  margin: 0;
+
+  padding: 10px 12px;
+
+  color: #ff9292;
+  background: rgba(220, 53, 69, 0.12);
+
+  border: 1px solid rgba(220, 53, 69, 0.25);
+  border-radius: 8px;
+
+  font-size: 0.85rem;
+}
+
+.botao-login-admin {
+  width: 100%;
+  min-height: 46px;
+
+  margin-top: 4px;
+
+  color: #171a19;
+  background: #f7941d;
+
+  border: 1px solid #f7941d;
+  border-radius: 9px;
+
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.botao-login-admin:hover {
+  background: #ff9f2e;
+  transform: translateY(-1px);
+}
+
+.botao-login-admin:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
