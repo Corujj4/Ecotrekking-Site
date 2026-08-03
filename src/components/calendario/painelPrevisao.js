@@ -1,4 +1,5 @@
 import { obterPrevisaoPorData } from "../../services/clima.js";
+import { formatarData } from "../../utils/formatadores.js";
 
 let painel;
 
@@ -23,7 +24,7 @@ export function atualizarPainelPrevisao(data) {
   }
 
   const horas = previsao.horas ?? [];
-  const dataFormatada = formatarData(data);
+  const dataFormatada = formatarData(data, { comAno: true });
 
   const horasSelecionadas = horas.filter((hora) => {
   const numeroHora = Number(
@@ -69,43 +70,6 @@ export function atualizarPainelPrevisao(data) {
   `;
 }
 
-function formatarData(data) {
-  const [ano, mes, dia] = data
-    .split("-")
-    .map(Number);
-
-  const dataLocal = new Date(
-    ano,
-    mes - 1,
-    dia,
-  );
-
-  const diaSemana = dataLocal.toLocaleDateString(
-    "pt-BR",
-    {
-      weekday: "long",
-    },
-  );
-
-  const dataCompleta = dataLocal.toLocaleDateString(
-    "pt-BR",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  );
-
-  return {
-    diaSemana:
-      diaSemana.charAt(0).toUpperCase() +
-      diaSemana.slice(1),
-
-    dataCompleta:
-      dataCompleta.charAt(0).toUpperCase() +
-      dataCompleta.slice(1),
-  };
-}
 function carregarPainel() {
     painel = document.querySelector("#painel-previsao-dia");
 }

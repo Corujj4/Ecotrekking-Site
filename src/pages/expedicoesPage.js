@@ -9,7 +9,7 @@ export function renderExpedicoes() {
   return `
     ${renderNavbar()}
     ${renderCatalogo("expedicao")}
-    ${renderFooter()};;
+    ${renderFooter()}
   `
 }
 

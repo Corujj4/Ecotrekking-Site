@@ -1,4 +1,10 @@
 import { listarEventos } from "../../services/eventosService.js";
+import {
+  criarDataLocal,
+  escaparTextoHtml as escaparHTML,
+  formatarStatus as formatarStatusPadrao,
+} from "../../utils/formatadores.js";
+
 const configuracaoTipos = {
   trilha: {
     nome: "Trilha",
@@ -15,21 +21,6 @@ const configuracaoTipos = {
     icone: "🧭",
   },
 };
-
-function escaparHTML(valor = "") {
-  return String(valor)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function criarDataLocal(dataString) {
-  const [ano, mes, dia] = dataString.split("-").map(Number);
-
-  return new Date(ano, mes - 1, dia);
-}
 
 function formatarDataEvento(dataString) {
   const data = criarDataLocal(dataString);
@@ -160,13 +151,7 @@ function renderGrupoDia(data, eventosDoDia) {
 }
 
 function formatarStatus(status) {
-  const statusFormatados = {
-    lancado: "Lançado",
-    confirmado: "Confirmado",
-    cancelado: "Cancelado",
-  };
-
-  return statusFormatados[status] || "Lançado";
+  return formatarStatusPadrao(status, { padrao: "Lançado" });
 }
 
 function agruparEventosPorData(eventos) {

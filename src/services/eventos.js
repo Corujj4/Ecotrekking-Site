@@ -10,6 +10,11 @@ import {
 import { atualizarPainelPrevisao }
 from "../components/calendario/painelPrevisao.js";
 
+import {
+  formatarData,
+  formatarStatus,
+} from "../utils/formatadores.js";
+
 let painelEvento = null;
 let calendario = null;
 let painelConfigurado = null;
@@ -545,66 +550,6 @@ const resumoClima = previsao
   `;
 }
 
-function criarTimelineClima(data) {
-  const previsao = obterPrevisaoPorData(data);
-  console.log(previsao);
-  const horas = previsao?.horas ?? [];
-
-  if (horas.length === 0) {
-    return `
-      <p class="timeline-indisponivel">
-        Previsão por horário indisponível.
-      </p>
-    `;
-  }
-
-  return `
-    <div class="timeline-clima">
-      ${horas
-        .map(
-          (hora) => `
-        <div class="timeline-item">
-          <strong>${hora.horario}</strong>
-
-          <span class="timeline-temperatura">
-            ${hora.temperatura}°
-          </span>
-
-          <span class="timeline-chuva">
-            🌧 ${hora.chanceChuva}%
-          </span>
-        </div>
-      `,
-        )
-        .join("")}
-    </div>
-  `;
-}
-
-function formatarData(data) {
-  const [ano, mes, dia] = data.split("-").map(Number);
-
-  const dataLocal = new Date(ano, mes - 1, dia);
-
-  const diaSemana = dataLocal.toLocaleDateString("pt-BR", {
-    weekday: "long",
-  });
-
-  const dataCompleta = dataLocal.toLocaleDateString(
-  "pt-BR",
-  {
-    day: "numeric",
-    month: "long",
-  },
-);
-
-  return {
-    diaSemana: diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1),
-
-    dataCompleta: dataCompleta.charAt(0).toUpperCase() + dataCompleta.slice(1),
-  };
-}
-
 function abrirConfirmacaoExclusao(eventoId) {
   const eventoEncontrado = eventos.find((evento) => evento.id === eventoId);
 
@@ -770,16 +715,6 @@ function obterIconeTipo(tipo) {
   };
 
   return iconesTipos[tipo] ?? "📅";
-}
-
-function formatarStatus(status) {
-  const nomesStatus = {
-    lancado: "Lançado",
-    confirmado: "Confirmado",
-    cancelado: "Cancelado",
-  };
-
-  return nomesStatus[status];
 }
 
 function fecharPainel() {
