@@ -13,5 +13,9 @@ import { iniciarRouter } from "./router.js";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import "./styles/catalogo.css";
 import "./styles/admin.css";
+import { inject } from '@vercel/analytics';
+
+// Initialize Vercel Web Analytics
+inject();
 
 iniciarRouter();
