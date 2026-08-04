@@ -14,5 +14,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import "./styles/catalogo.css";
 import "./styles/admin.css";
 import { inject } from '@vercel/analytics';
+import "./styles/dashboard.css";
+
+inject();
 
 iniciarRouter();

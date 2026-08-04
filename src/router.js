@@ -1,45 +1,29 @@
 import { renderHome } from "./pages/homePage.js";
-import {
-  renderCalendario,
-  iniciarPaginaCalendario,
-} from "./pages/calendarioPage.js";
+import {renderCalendario,iniciarPaginaCalendario,} from "./pages/calendarioPage.js";
 import { renderGaleriaPage } from "./pages/galeriaPage.js";
-import {
-  renderTrilhas,
-  iniciarPaginaTrilhas,
-} from "./pages/trilhasPage.js";
+import {renderTrilhas,iniciarPaginaTrilhas,} from "./pages/trilhasPage.js";
 import { criarCalendario } from "./components/calendario/calendario.js";
 import { configurarClima } from "./services/clima.js";
 import { configurarEventos } from "./services/eventos.js";
 import { renderNavbar } from "./components/navbar/navbar.js";
-import {
-  renderRapel,
-  iniciarPaginaRapel,
-} from "./pages/rapelPage.js";
-import {
-  renderExpedicoes,
-  iniciarPaginaExpedicoes,
-} from "./pages/expedicoesPage.js";
-import { renderCalendarioADMIN } from "./pages/calendarioPageADMIN.js";
-
+import {renderRapel,iniciarPaginaRapel,} from "./pages/rapelPage.js";
+import {renderExpedicoes,iniciarPaginaExpedicoes,} from "./pages/expedicoesPage.js";
+import { renderDashboardView, } from "./pages/admin/dashboardPageAdmin.js";
 import { obterUsuarioAtual } from "./services/authService.js";
-
-import {
-  renderLoginAdmin,
-  iniciarLoginAdmin,
-} from "./pages/admin/loginPage.js";
-
+import {renderLoginAdmin, iniciarLoginAdmin,} from "./pages/admin/loginPage.js";
+import { iniciarDashboard } from "./pages/admin/dashboard.js";
 
 const rotas = {
   "/": renderHome,
   "/calendario": renderCalendario,
-  "/calendario-admin": renderCalendarioADMIN,
+  "/dashboard": renderDashboardView,
   "/admin/login": renderLoginAdmin,
   "/trilhas": renderTrilhas,
   "/galeria": renderGaleriaPage,
   "/rapel": renderRapel,
   "/expedicoes": renderExpedicoes,
 };
+
 
 
 async function renderizarPagina() {
@@ -59,14 +43,15 @@ async function renderizarPagina() {
    * ========================================================
    */
 
-  if (rotaAtual === "/calendario-admin") {
-    const usuario = await obterUsuarioAtual();
+  if (rotaAtual === "/dashboard") {
+  const usuario = await obterUsuarioAtual();
 
-    if (!usuario) {
-      window.location.hash = "#/admin/login";
-      return;
-    }
+  if (!usuario) {
+    window.location.hash = "#/admin/login";
+    return;
   }
+}
+  
 
   /*
    * ========================================================
@@ -97,11 +82,12 @@ async function renderizarPagina() {
    * ========================================================
    */
 
-  if (rotaAtual === "/calendario-admin") {
-    configurarClima();
-    configurarEventos();
-    criarCalendario();
-  }
+  if (rotaAtual === "/dashboard") {
+  configurarClima();
+  configurarEventos();
+  criarCalendario();
+  iniciarDashboard();
+}
 
 
   /*

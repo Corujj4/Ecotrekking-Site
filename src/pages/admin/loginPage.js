@@ -114,7 +114,7 @@ export function iniciarLoginAdmin() {
           campoSenha.value
         );
 
-        window.location.hash = "#/calendario-admin";
+        window.location.hash = "#/dashboard";
 
       } catch (erro) {
         console.error(
