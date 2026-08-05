@@ -1,6 +1,6 @@
-import { fazerLogin } from "../../services/authService.js";
-import { renderNavbar } from "../../components/navbar/navbar.js";
-import { renderFooter } from "../../components/home/footer.js";
+import { fazerLogin } from "../services/authService.js";
+import { renderNavbar } from "../components/navbar/navbar.js";
+import { renderFooter } from "../components/home/footer.js";
 
 export function renderLoginAdmin() {
   return `

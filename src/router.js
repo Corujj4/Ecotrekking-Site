@@ -8,10 +8,10 @@ import { configurarEventos } from "./services/eventos.js";
 import { renderNavbar } from "./components/navbar/navbar.js";
 import {renderRapel,iniciarPaginaRapel,} from "./pages/rapelPage.js";
 import {renderExpedicoes,iniciarPaginaExpedicoes,} from "./pages/expedicoesPage.js";
-import { renderDashboardView, } from "./pages/admin/dashboardPageAdmin.js";
+import { renderDashboardView, } from "./admin/dashboardPageAdmin.js";
 import { obterUsuarioAtual } from "./services/authService.js";
-import {renderLoginAdmin, iniciarLoginAdmin,} from "./pages/admin/loginPage.js";
-import { iniciarDashboard } from "./pages/admin/dashboard.js";
+import {renderLoginAdmin, iniciarLoginAdmin,} from "./admin/loginPage.js";
+import { iniciarDashboard } from "./admin/dashboard.js";
 
 const rotas = {
   "/": renderHome,
