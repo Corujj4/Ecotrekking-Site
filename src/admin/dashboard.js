@@ -1,3 +1,5 @@
+import { iniciarCrudAtividades } from "./atividades/dashboardAtividadesCrud.js";
+import { iniciarCrudGaleria } from "./galeria/dashboardGaleriaCrud.js";
 let menuAtual = "calendario";
 
 export function renderDashboard() {
@@ -449,50 +451,86 @@ export function renderDashboard() {
 
 export function iniciarDashboard() {
 
-  const botoesMenu = document.querySelectorAll(
-    ".dashboard-menu-item"
-  );
+    const botoesMenu = document.querySelectorAll(
+        ".dashboard-menu-item"
+    );
 
-  const conteudos = document.querySelectorAll(
-    ".dashboard-menu-conteudo"
-  );
+    const conteudos = document.querySelectorAll(
+        ".dashboard-menu-conteudo"
+    );
 
-  if (!botoesMenu.length || !conteudos.length) {
-    return;
-  }
+    if (!botoesMenu.length || !conteudos.length) {
+        return;
+    }
 
-  botoesMenu.forEach((botao) => {
+    botoesMenu.forEach((botao) => {
 
-    botao.addEventListener("click", () => {
+        botao.addEventListener("click", async () => {
 
-      const menu = botao.dataset.menu;
+            const menu = botao.dataset.menu;
 
-      menuAtual = menu;
+            menuAtual = menu;
 
+            /* ===========================
+               MENU LATERAL
+            ============================ */
 
-      /* MENU */
+            botoesMenu.forEach((item) => {
 
-      botoesMenu.forEach((item) => {
-        item.classList.toggle(
-          "ativo",
-          item === botao
-        );
-      });
+                item.classList.toggle(
+                    "ativo",
+                    item === botao
+                );
 
+            });
 
-      /* CONTEÚDO */
+            /* ===========================
+               CONTEÚDO
+            ============================ */
 
-      conteudos.forEach((conteudo) => {
+            conteudos.forEach((conteudo) => {
 
-        conteudo.classList.toggle(
-          "ativo",
-          conteudo.dataset.conteudo === menu
-        );
+                conteudo.classList.toggle(
+                    "ativo",
+                    conteudo.dataset.conteudo === menu
+                );
 
-      });
+            });
+
+            /* ===========================
+               MÓDULOS
+            ============================ */
+
+            switch (menu) {
+
+                case "atividades":
+
+                    await iniciarCrudAtividades();
+
+                    break;
+
+                case "galeria":
+
+                     iniciarCrudGaleria();
+
+                    break;
+
+                case "usuarios":
+
+                    // iniciarCrudUsuarios();
+
+                    break;
+
+                case "calendario":
+
+                    // iniciarCrudCalendario();
+
+                    break;
+
+            }
+
+        });
 
     });
-
-  });
 
 }

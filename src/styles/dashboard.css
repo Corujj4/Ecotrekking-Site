@@ -455,3 +455,278 @@
   }
 
 }
+/* ==========================================
+   TABELA
+========================================== */
+
+.dashboard-tabela-wrapper{
+    overflow-x:auto;
+}
+
+.dashboard-tabela{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.95rem;
+}
+
+.dashboard-tabela thead tr{
+    border-bottom:2px solid rgba(255,255,255,.12);
+}
+
+.dashboard-tabela th{
+    padding:16px 14px;
+    text-align:left;
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#9ca3af;
+    font-weight:700;
+}
+
+.dashboard-tabela td{
+    padding:16px 14px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    vertical-align:middle;
+}
+
+.dashboard-tabela tbody tr{
+    transition:.2s;
+}
+
+.dashboard-tabela tbody tr:hover{
+    background:rgba(255,255,255,.04);
+}
+
+.dashboard-acoes{
+    display:flex;
+    gap:8px;
+}
+
+.dashboard-btn-editar,
+.dashboard-btn-excluir{
+
+    width:36px;
+    height:36px;
+
+    border:none;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:.2s;
+}
+
+.dashboard-btn-editar{
+
+    background:#f59e0b;
+    color:#fff;
+
+}
+
+.dashboard-btn-editar:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.dashboard-btn-excluir{
+
+    background:#dc2626;
+    color:#fff;
+
+}
+
+.dashboard-btn-excluir:hover{
+
+    transform:translateY(-2px);
+
+}
+/* =========================================================
+   MODAL DE ATIVIDADE
+========================================================= */
+
+.dashboard-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.dashboard-modal-overlay.ativo {
+    display: flex;
+}
+
+.dashboard-modal {
+    width: min(900px, 100%);
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #1b1f24;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.dashboard-modal-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 24px 28px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-modal-cabecalho h2 {
+    margin: 5px 0 0;
+}
+
+.dashboard-modal-fechar {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
+
+.dashboard-modal-fechar:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+/* =========================================================
+   FORMULÁRIO
+========================================================= */
+
+.dashboard-formulario {
+    padding: 28px;
+}
+
+.dashboard-formulario-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.dashboard-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dashboard-campo-grande,
+.dashboard-campo-full {
+    grid-column: 1 / -1;
+}
+
+.dashboard-campo label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #d1d5db;
+}
+
+.dashboard-campo input,
+.dashboard-campo select,
+.dashboard-campo textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+
+    outline: none;
+
+    font: inherit;
+}
+
+.dashboard-campo input:focus,
+.dashboard-campo select:focus,
+.dashboard-campo textarea:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.dashboard-campo textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.dashboard-campo select option {
+    background: #1b1f24;
+    color: white;
+}
+
+
+/* =========================================================
+   RODAPÉ
+========================================================= */
+
+.dashboard-modal-rodape {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+
+    margin-top: 28px;
+    padding-top: 20px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .dashboard-modal-overlay {
+        padding: 15px;
+    }
+
+    .dashboard-formulario-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-campo-grande,
+    .dashboard-campo-full {
+        grid-column: auto;
+    }
+
+    .dashboard-modal-cabecalho,
+    .dashboard-formulario {
+        padding: 20px;
+    }
+
+}
+.dashboard-modal-cabecalho h2 {
+    color: #fff;
+}

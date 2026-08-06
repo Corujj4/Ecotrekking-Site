@@ -171,13 +171,19 @@ export async function criarAtividade(atividade) {
     .single();
 
   if (error) {
+
     console.error(
-      "Erro ao criar atividade:",
-      error
+        "ERRO COMPLETO SUPABASE:",
+        error
+    );
+
+    console.error(
+        "DADOS ENVIADOS:",
+        dadosBanco
     );
 
     throw error;
-  }
+}
 
   return converterAtividadeBanco(data);
 }
